@@ -35,6 +35,9 @@ const Home: React.FC = () => {
       console.error('Error fetching solar data:', error);
       if (axios.isAxiosError(error)) {
         console.error('Axios error details:', error.response?.data);
+        if (error.response?.status === 429) {
+          throw new Error('You have exceeded your free daily limit. Please try again later.');
+        }
       }
       throw error;
     }
@@ -49,7 +52,11 @@ const Home: React.FC = () => {
       setSolarData(solarData);
     } catch (error) {
       console.error('Failed to fetch solar data:', error);
-      setError('Failed to fetch solar data. Please try again.');
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Failed to fetch solar data. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

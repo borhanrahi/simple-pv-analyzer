@@ -37,6 +37,13 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error('Error fetching data:', error.response?.data || error.message);
     if (axios.isAxiosError(error)) {
+      // Check if the error is due to exceeding the API limit
+      if (error.response?.status === 429) {
+        return NextResponse.json(
+          { error: 'You have exceeded your free daily limit. Please try again later.' },
+          { status: 429 }
+        );
+      }
       return NextResponse.json(
         { error: `Failed to fetch data: ${JSON.stringify(error.response?.data) || error.message}` },
         { status: error.response?.status || 500 }
