@@ -29,7 +29,7 @@ const Home: React.FC = () => {
   const fetchSolarData = useCallback(async (lat: number, lon: number) => {
     try {
       const response = await axios.get(`/api/solar-data?lat=${lat}&lon=${lon}`);
-      console.log('API Response:', response.data);  // Log the entire response
+      console.log('API Response:', response.data);
       return response.data.solarData;
     } catch (error) {
       console.error('Error fetching solar data:', error);
@@ -74,7 +74,7 @@ const Home: React.FC = () => {
 
       {location && (
         <div className="mt-4">
-          <p>Selected Location: Latitude {location.lat}, Longitude {location.lng}</p>
+          <p>Selected Location: Latitude {location.lat.toFixed(6)}, Longitude {location.lng.toFixed(6)}</p>
         </div>
       )}
 

@@ -40,7 +40,7 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
 - [Next.js](https://nextjs.org/) - React framework
 - [React](https://reactjs.org/) - UI library
-- [Tailwind CSS](https://tailwindcss.com/) - Styling (if used)
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [Vercel](https://vercel.com/) - Deployment platform
 
 ## Contributing
