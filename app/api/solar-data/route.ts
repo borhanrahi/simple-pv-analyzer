@@ -12,6 +12,11 @@ export async function GET(request: Request) {
 
   const solcastApiKey = process.env.NEXT_PUBLIC_SOLCAST_API_KEY;
 
+  if (!solcastApiKey) {
+    console.error('Solcast API key is not set');
+    return NextResponse.json({ error: 'Solcast API key is not configured' }, { status: 500 });
+  }
+
   try {
     // Fetch Solar Radiation Data from Solcast API
     const solcastResponse = await axios.get('https://api.solcast.com.au/radiation/estimated_actuals', {

@@ -26,26 +26,34 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchSolarData = useCallback(async (lat: number, lon: number) => {
+    try {
+      const response = await axios.get(`/api/solar-data?lat=${lat}&lon=${lon}`);
+      console.log('API Response:', response.data);  // Log the entire response
+      return response.data.solarData;
+    } catch (error) {
+      console.error('Error fetching solar data:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Axios error details:', error.response?.data);
+      }
+      throw error;
+    }
+  }, []);
+
   const handleLocationSelect = useCallback(async (latlng: { lat: number; lng: number }) => {
     setLocation(latlng);
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`/api/solar-data?lat=${latlng.lat}&lon=${latlng.lng}`);
-      setSolarData(response.data.solarData);
-    } catch (err) {
-      console.error('Error details:', err);
-      if (axios.isAxiosError(err)) {
-        const errorMessage = err.response?.data?.error || err.message;
-        console.error('API error:', errorMessage);
-        setError(`Failed to fetch data: ${errorMessage}`);
-      } else {
-        setError('An unexpected error occurred. Please try again.');
-      }
+      const solarData = await fetchSolarData(latlng.lat, latlng.lng);
+      setSolarData(solarData);
+    } catch (error) {
+      console.error('Failed to fetch solar data:', error);
+      setError('Failed to fetch solar data. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [fetchSolarData]);
 
   const handleUserInputs = useCallback((userInputs: PVInputs) => {
     setInputs(userInputs);
